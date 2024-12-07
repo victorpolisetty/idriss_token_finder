@@ -1,7 +1,6 @@
-# Credit Station
+# Idriss Token Finder
 
-A hybrid credit scoring platform that combines on-chain identity data, decentralized social graphs, and traditional credit scores.
-This scoring system will power an undercollateralized lending protocol where borrowers can access loans without needing full collateral.
+An agent system to scrape Farcaster and find relevant tweets based on natural language promptings.
 
 ## System requirements
 
@@ -32,7 +31,7 @@ autonomy packages sync -> Update 3rd party packages (valory hashes)
 autonomy packages lock -> Update dev packages (my own created hashes)
 poetry lock -> Update poetry.lock file after putting new deps in pyproject.toml
 autonomy generate-key ethereum -n 2 -> Create 2 new agent addresses and private keys (store one private key in the ethereum_private_key.txt file)
-- Update all_participants in both the .env and agents/credit_score_agent/aea-config.yaml files based on if you want to an agent (1 address) or service (multiple addresses) to run
+- Update all_participants in both the .env and agents/idriss_token_finder_agent/aea-config.yaml files based on if you want to an agent (1 address) or service (multiple addresses) to run
 ```
 
 ## Troubleshooting

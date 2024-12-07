@@ -1,11 +1,11 @@
-agent_name: credit_score_agent
+agent_name: idriss_token_finder_agent
 author: victorpolisetty
 version: 0.1.0
 license: Apache-2.0
-description: A credit score agent.
+description: A idriss token finder agent.
 aea_version: '>=1.19.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeiflonmjluz5ty5tun5svw4rfba7yiqwppjv7mx2m73zv6wuj4zaqu
+  __init__.py: bafybeib5vnwcxiqc4tcpho2wfn6qsko5cg6mmfpkne2rftisqceavbcrsy
 fingerprint_ignore_patterns: []
 connections:
 - valory/abci:0.1.0:bafybeiclexb6cnsog5yjz2qtvqyfnf7x5m7tpp56hblhk3pbocbvgjzhze
@@ -31,8 +31,8 @@ protocols:
 skills:
 - valory/abstract_abci:0.1.0:bafybeihat4giyc4bz6zopvahcj4iw53356pbtwfn7p4d5yflwly2qhahum
 - valory/abstract_round_abci:0.1.0:bafybeih3enhagoql7kzpeyzzu2scpkif6y3ubakpralfnwxcvxexdyvy5i
-- victorpolisetty/credit_score_aggregation_abci:0.1.0:bafybeih6dl26fwi7wbahst7oqdal2bsrcbkjcbtcf5imwnm2i3ugysn7c4
-- victorpolisetty/credit_score_abci:0.1.0:bafybeibj4zg4z6urfps6h2icjdd6oiq2oh3h657qkrduxeuaoplmgaizuq
+- victorpolisetty/idriss_token_finder_aggregation_abci:0.1.0:bafybeihnmnjnl7drucndtoa7g42ngxxwmpfjiexnfguu5vmqxxbkdt5olm
+- victorpolisetty/idriss_token_finder_abci:0.1.0:bafybeibohq4okfbehayhoew7lw6cv4jcgznastlvmzlngyw7tshwmxhrv4
 - valory/registration_abci:0.1.0:bafybeiek7zcsxbucjwzgqfftafhfrocvc7q4yxllh2q44jeemsjxg3rcfm
 - valory/reset_pause_abci:0.1.0:bafybeidw4mbx3os3hmv7ley7b3g3gja7ydpitr7mxbjpwzxin2mzyt5yam
 - valory/termination_abci:0.1.0:bafybeihq6qtbwt6i53ayqym63vhjexkcppy26gguzhhjqywfmiuqghvv44
@@ -74,7 +74,7 @@ default_connection: null
 public_id: valory/abci:0.1.0
 type: connection
 config:
-  target_skill_id: victorpolisetty/credit_score_abci:0.1.0
+  target_skill_id: victorpolisetty/idriss_token_finder_abci:0.1.0
   host: ${str:localhost}
   port: ${int:26658}
   use_tendermint: ${bool:false}
@@ -109,7 +109,7 @@ cert_requests:
   public_key: ${str:02d3a830c9d6ea1ae91936951430dee11f4662f33118b02190693be835359a9d77}
   save_path: .certs/acn_cosmos_11000.txt
 ---
-public_id: victorpolisetty/credit_score_abci:0.1.0
+public_id: victorpolisetty/idriss_token_finder_abci:0.1.0
 type: skill
 models:
   benchmark_tool:
@@ -190,4 +190,4 @@ public_id: valory/http_server:0.22.0:bafybeicblltx7ha3ulthg7bzfccuqqyjmihhrvfezt
 type: connection
 config:
   host: 0.0.0.0
-  target_skill_id: victorpolisetty/credit_score_abci:0.1.0
+  target_skill_id: victorpolisetty/idriss_token_finder_abci:0.1.0

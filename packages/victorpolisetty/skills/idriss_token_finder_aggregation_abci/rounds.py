@@ -17,14 +17,14 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains the rounds of CreditScoreAggregationAbciApp."""
+"""This package contains the rounds of IdrissTokenFinderAggregationAbciApp."""
 
 from enum import Enum
 from typing import Dict, FrozenSet, Optional, Set
 
-from packages.victorpolisetty.skills.credit_score_aggregation_abci.payloads import (
+from packages.victorpolisetty.skills.idriss_token_finder_aggregation_abci.payloads import (
     HelloPayload,
-    CollectTalentProtocolScorePayload
+    CollectFarcasterSearchPayload
 )
 from packages.valory.skills.abstract_round_abci.base import (
     AbciApp,
@@ -41,7 +41,7 @@ from packages.valory.skills.abstract_round_abci.base import (
 
 
 class Event(Enum):
-    """CreditScoreAggregationAbciApp Events"""
+    """IdrissTokenFinderAggregationAbciApp Events"""
 
     DONE = "done"
     NO_MAJORITY = "no_majority"
@@ -71,12 +71,12 @@ class SynchronizedData(BaseSynchronizedData):
         return self._get_deserialized("participant_to_hello_round")
 
     @property
-    def search_talent_protocol_score(self) -> Optional[str]:
+    def search_farcaster_search(self) -> Optional[str]:
         """Get the hello_data."""
         return self.db.get("hello_data", None)
 
     @property
-    def participant_to_talent_protocol_score_round(self) -> DeserializedCollection:
+    def participant_to_farcaster_search_round(self) -> DeserializedCollection:
         """Get the participants to the hello round."""
         return self._get_deserialized("participant_to_hello_round")
 
@@ -94,23 +94,23 @@ class HelloRound(CollectSameUntilThresholdRound):
     # Event.ROUND_TIMEOUT  # this needs to be mentioned for static checkers
 
 
-class CollectTalentProtocolScoreRound(CollectSameUntilThresholdRound):
-    """CollectTalentProtocolScoreRound"""
+class CollectFarcasterSearchRound(CollectSameUntilThresholdRound):
+    """CollectFarcasterSearchRound"""
 
-    payload_class = CollectTalentProtocolScorePayload
+    payload_class = CollectFarcasterSearchPayload
     synchronized_data_class = SynchronizedData
     done_event = Event.DONE
     no_majority_event = Event.NO_MAJORITY
-    collection_key = get_name(SynchronizedData.search_talent_protocol_score)
-    selection_key = get_name(SynchronizedData.participant_to_talent_protocol_score_round)
+    collection_key = get_name(SynchronizedData.search_farcaster_search)
+    selection_key = get_name(SynchronizedData.participant_to_farcaster_search_round)
 
 
 class FinishedHelloRound(DegenerateRound):
     """FinishedHelloRound"""
 
 
-class CreditScoreAggregationAbciApp(AbciApp[Event]):
-    """CreditScoreAggregationAbciApp"""
+class IdrissTokenFinderAggregationAbciApp(AbciApp[Event]):
+    """IdrissTokenFinderAggregationAbciApp"""
 
     initial_round_cls: AppState = HelloRound
     initial_states: Set[AppState] = {
@@ -120,11 +120,11 @@ class CreditScoreAggregationAbciApp(AbciApp[Event]):
         HelloRound: {
             Event.NO_MAJORITY: HelloRound,
             Event.ROUND_TIMEOUT: HelloRound,
-            Event.DONE: CollectTalentProtocolScoreRound,
+            Event.DONE: CollectFarcasterSearchRound,
         },
-        CollectTalentProtocolScoreRound: {
-            Event.NO_MAJORITY: CollectTalentProtocolScoreRound,
-            Event.ROUND_TIMEOUT: CollectTalentProtocolScoreRound,
+        CollectFarcasterSearchRound: {
+            Event.NO_MAJORITY: CollectFarcasterSearchRound,
+            Event.ROUND_TIMEOUT: CollectFarcasterSearchRound,
             Event.DONE: FinishedHelloRound,
         },
         FinishedHelloRound: {},

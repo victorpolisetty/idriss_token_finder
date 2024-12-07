@@ -21,8 +21,8 @@
 
 from typing import Set, Type
 
-from packages.victorpolisetty.skills.credit_score_aggregation_abci.behaviours import CreditScoreAggregationRoundBehaviour
-from packages.victorpolisetty.skills.credit_score_abci.composition import CreditScoreSkillAbciApp
+from packages.victorpolisetty.skills.idriss_token_finder_aggregation_abci.behaviours import IdrissTokenFinderAggregationRoundBehaviour
+from packages.victorpolisetty.skills.idriss_token_finder_abci.composition import IdrissTokenFinderSkillAbciApp
 from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
@@ -43,16 +43,16 @@ from packages.valory.skills.transaction_settlement_abci.behaviours import (
 )
 
 
-class CreditScoreConsensusBehaviour(AbstractRoundBehaviour):
+class IdrissTokenFinderConsensusBehaviour(AbstractRoundBehaviour):
     """Class to define the behaviours this AbciApp has."""
 
     initial_behaviour_cls = RegistrationStartupBehaviour
-    abci_app_cls = CreditScoreSkillAbciApp
+    abci_app_cls = IdrissTokenFinderSkillAbciApp
     behaviours: Set[Type[BaseBehaviour]] = {
         *AgentRegistrationRoundBehaviour.behaviours,
         *ResetPauseABCIConsensusBehaviour.behaviours,
         *TransactionSettlementRoundBehaviour.behaviours,
         *TerminationAbciBehaviours.behaviours,
-        *CreditScoreAggregationRoundBehaviour.behaviours,
+        *IdrissTokenFinderAggregationRoundBehaviour.behaviours,
     }
     background_behaviours_cls = {BackgroundBehaviour}

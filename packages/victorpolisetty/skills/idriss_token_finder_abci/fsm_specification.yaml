@@ -5,23 +5,23 @@ alphabet_in:
   - ROUND_TIMEOUT
 default_start_state: RegistrationStartupRound
 final_states: []
-label: CreditScoreSkillAbciApp
+label: IdrissTokenFinderSkillAbciApp
 start_states:
   - RegistrationRound
   - RegistrationStartupRound
 states:
   - HelloRound
-  - CollectTalentProtocolScoreRound
+  - CollectFarcasterSearchRound
   - RegistrationRound
   - RegistrationStartupRound
   - ResetAndPauseRound
 transition_func:
-  (HelloRound, DONE): CollectTalentProtocolScoreRound
+  (HelloRound, DONE): CollectFarcasterSearchRound
   (HelloRound, NO_MAJORITY): HelloRound
   (HelloRound, ROUND_TIMEOUT): HelloRound
-  (CollectTalentProtocolScoreRound, DONE): ResetAndPauseRound
-  (CollectTalentProtocolScoreRound, NO_MAJORITY): CollectTalentProtocolScoreRound
-  (CollectTalentProtocolScoreRound, ROUND_TIMEOUT): CollectTalentProtocolScoreRound
+  (CollectFarcasterSearchRound, DONE): ResetAndPauseRound
+  (CollectFarcasterSearchRound, NO_MAJORITY): CollectFarcasterSearchRound
+  (CollectFarcasterSearchRound, ROUND_TIMEOUT): CollectFarcasterSearchRound
   (RegistrationRound, DONE): HelloRound
   (RegistrationRound, NO_MAJORITY): RegistrationRound
   (RegistrationStartupRound, DONE): HelloRound

@@ -17,7 +17,7 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains round behaviours of CreditScoreAggregationAbciApp."""
+"""This package contains round behaviours of IdrissTokenFinderAggregationAbciApp."""
 
 from abc import ABC
 from typing import Generator, Set, Type, cast
@@ -27,15 +27,15 @@ from packages.valory.skills.abstract_round_abci.behaviours import (
     AbstractRoundBehaviour,
     BaseBehaviour,
 )
-from packages.victorpolisetty.skills.credit_score_aggregation_abci.models import Params, SharedState
-from packages.victorpolisetty.skills.credit_score_aggregation_abci.payloads import (
+from packages.victorpolisetty.skills.idriss_token_finder_aggregation_abci.models import Params, SharedState
+from packages.victorpolisetty.skills.idriss_token_finder_aggregation_abci.payloads import (
     HelloPayload,
-    CollectTalentProtocolScorePayload,
+    CollectFarcasterSearchPayload,
 )
-from packages.victorpolisetty.skills.credit_score_aggregation_abci.rounds import (
-    CreditScoreAggregationAbciApp,
+from packages.victorpolisetty.skills.idriss_token_finder_aggregation_abci.rounds import (
+    IdrissTokenFinderAggregationAbciApp,
     HelloRound,
-    CollectTalentProtocolScoreRound,
+    CollectFarcasterSearchRound,
     SynchronizedData,
 )
 
@@ -79,10 +79,10 @@ class HelloBehaviour(HelloBaseBehaviour):  # pylint: disable=too-many-ancestors
 
         self.set_done()
 
-class CollectTalentProtocolScoreBehaviour(HelloBaseBehaviour):  # pylint: disable=too-many-ancestors
-    """Behaviour to observe and collect Talent Protocol score."""
+class CollectFarcasterSearchBehaviour(HelloBaseBehaviour):  # pylint: disable=too-many-ancestors
+    """Behaviour to observe and collect Farcaster Search."""
 
-    matching_round = CollectTalentProtocolScoreRound
+    matching_round = CollectFarcasterSearchRound
 
     def async_act(self) -> Generator:
         """
@@ -97,7 +97,7 @@ class CollectTalentProtocolScoreBehaviour(HelloBaseBehaviour):  # pylint: disabl
         """
 
         # Check if maximum retries have been exceeded
-        if self.context.talent_protocol_score_response.is_retries_exceeded():
+        if self.context.farcaster_search_response.is_retries_exceeded():
             # Wait to see if other agents can progress the round, otherwise restart
             with self.context.benchmark_tool.measure(self.behaviour_id).consensus():
                 yield from self.wait_until_round_end()
@@ -107,9 +107,9 @@ class CollectTalentProtocolScoreBehaviour(HelloBaseBehaviour):  # pylint: disabl
         # Measure the local execution time of the HTTP request
         with self.context.benchmark_tool.measure(self.behaviour_id).local():
             # Prepare API request specifications
-            api_specs = self.context.talent_protocol_score_response.get_spec()
+            api_specs = self.context.farcaster_search_response.get_spec()
 
-            # Make the asynchronous HTTP request to the Talent Protocol API
+            # Make the asynchronous HTTP request to the Farcaster Search API
             response = yield from self.get_http_response(
                 method=api_specs["method"],
                 url=api_specs["url"],
@@ -118,24 +118,25 @@ class CollectTalentProtocolScoreBehaviour(HelloBaseBehaviour):  # pylint: disabl
             )
 
         try:
-            talent_protocol_response = self.context.talent_protocol_score_response.process_response(response)
+            farcaster_search_response = self.context.farcaster_search_response.process_response(response)
         except Exception as e:
-            self.context.logger.error(f"Error processing Talent Protocol response: {e}")
-            talent_protocol_response = None
+            self.context.logger.error(f"Error processing Farcaster Search response: {e}")
+            farcaster_search_response = None
 
-        # Extract the 'score' value safely
-        if talent_protocol_response:
-            talent_protocol_score = str(talent_protocol_response.get("passport", {}).get("score", ""))
+        # Extract the response from farcaster search response
+        if farcaster_search_response:
+            farcaster_search_result = str(farcaster_search_response['casts'][0]['body']['data']['text'])
         else:
-            talent_protocol_score = ""
+            farcaster_search_result = ""
 
         # Handle the API response
-        if talent_protocol_score:
+        # TODO: Fix here
+        if farcaster_search_result:
             self.context.logger.info(
-                f"Got talent_protocol_score from {self.context.talent_protocol_score_response.api_id}: {talent_protocol_score}"
+                f"Got farcaster_search_result from {self.context.farcaster_search_response.api_id}: {farcaster_search_result}"
             )
-            payload = CollectTalentProtocolScorePayload(
-                self.context.agent_address, talent_protocol_score
+            payload = CollectFarcasterSearchPayload(
+                self.context.agent_address, farcaster_search_result
             )
 
             # Send a transaction and wait for the round to end
@@ -145,22 +146,22 @@ class CollectTalentProtocolScoreBehaviour(HelloBaseBehaviour):  # pylint: disabl
             self.set_done()
         else:
             self.context.logger.warning(
-                f"Could not retrieve a valid talent_protocol_score from {self.context.talent_protocol_score_response.api_id}"
+                f"Could not retrieve a valid farcaster_search_result from {self.context.farcaster_search_response.api_id}"
             )
 
             # Wait before retrying
             yield from self.sleep(
-                self.context.talent_protocol_score_response.retries_info.suggested_sleep_time
+                self.context.farcaster_search_response.retries_info.suggested_sleep_time
             )
-            self.context.talent_protocol_score_response.increment_retries()
+            self.context.farcaster_search_response.increment_retries()
 
 
-class CreditScoreAggregationRoundBehaviour(AbstractRoundBehaviour):
-    """CreditScoreAggregationBehaviour"""
+class IdrissTokenFinderAggregationRoundBehaviour(AbstractRoundBehaviour):
+    """IdrissTokenFinderAggregationBehaviour"""
 
     initial_behaviour_cls = HelloBehaviour
-    abci_app_cls = CreditScoreAggregationAbciApp  # type: ignore
+    abci_app_cls = IdrissTokenFinderAggregationAbciApp  # type: ignore
     behaviours: Set[Type[BaseBehaviour]] = [  # type: ignore
         HelloBehaviour,
-        CollectTalentProtocolScoreBehaviour
+        CollectFarcasterSearchBehaviour
     ]

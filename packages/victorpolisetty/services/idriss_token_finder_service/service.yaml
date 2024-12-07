@@ -1,12 +1,12 @@
-name: credit_score_service
+name: idriss_token_finder_service
 author: victorpolisetty
 version: 0.1.0
-description: A credit score agent service.
+description: A idriss token finder agent service.
 aea_version: '>=1.0.0, <2.0.0'
 license: Apache-2.0
 fingerprint: {}
 fingerprint_ignore_patterns: []
-agent: victorpolisetty/credit_score_agent:0.1.0:bafybeibaqpc5e4q3hkv4cnokaomcbfvjrmdpbsur6rz3ofijmaz7aymmgm
+agent: victorpolisetty/idriss_token_finder_agent:0.1.0:bafybeifvk6nolzemuml3pdhiaegf53s6s2axgvfqbq5uvwwiqyirskxacy
 number_of_agents: 1
 deployment:
   agent:
@@ -14,7 +14,7 @@ deployment:
       0:
         8000: 8000
 ---
-public_id: victorpolisetty/credit_score_abci:0.1.0
+public_id: victorpolisetty/idriss_token_finder_abci:0.1.0
 type: skill
 extra:
   params_args:

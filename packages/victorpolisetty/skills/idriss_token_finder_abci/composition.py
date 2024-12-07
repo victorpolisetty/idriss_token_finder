@@ -17,9 +17,9 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This package contains round behaviours of CreditScoreSkillAbciApp."""
+"""This package contains round behaviours of IdrissTokenFinderSkillAbciApp."""
 
-import packages.victorpolisetty.skills.credit_score_aggregation_abci.rounds as CreditScoreAggregationAbci
+import packages.victorpolisetty.skills.idriss_token_finder_aggregation_abci.rounds as IdrissTokenFinderAggregationAbci
 import packages.valory.skills.registration_abci.rounds as RegistrationAbci
 import packages.valory.skills.reset_pause_abci.rounds as ResetAndPauseAbci
 from packages.valory.skills.abstract_round_abci.abci_app_chain import (
@@ -35,9 +35,9 @@ from packages.valory.skills.termination_abci.rounds import (
 
 
 abci_app_transition_mapping: AbciAppTransitionMapping = {
-    RegistrationAbci.FinishedRegistrationRound: CreditScoreAggregationAbci.HelloRound,
-    CreditScoreAggregationAbci.FinishedHelloRound: ResetAndPauseAbci.ResetAndPauseRound,
-    ResetAndPauseAbci.FinishedResetAndPauseRound: CreditScoreAggregationAbci.HelloRound,
+    RegistrationAbci.FinishedRegistrationRound: IdrissTokenFinderAggregationAbci.HelloRound,
+    IdrissTokenFinderAggregationAbci.FinishedHelloRound: ResetAndPauseAbci.ResetAndPauseRound,
+    ResetAndPauseAbci.FinishedResetAndPauseRound: IdrissTokenFinderAggregationAbci.HelloRound,
     ResetAndPauseAbci.FinishedResetAndPauseErrorRound: ResetAndPauseAbci.ResetAndPauseRound,
 }
 
@@ -47,10 +47,10 @@ termination_config = BackgroundAppConfig(
     abci_app=TerminationAbciApp,
 )
 
-CreditScoreSkillAbciApp = chain(
+IdrissTokenFinderSkillAbciApp = chain(
     (
         RegistrationAbci.AgentRegistrationAbciApp,
-        CreditScoreAggregationAbci.CreditScoreAggregationAbciApp,
+        IdrissTokenFinderAggregationAbci.IdrissTokenFinderAggregationAbciApp,
         ResetAndPauseAbci.ResetPauseAbciApp,
     ),
     abci_app_transition_mapping,

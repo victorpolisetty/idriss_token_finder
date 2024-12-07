@@ -3,9 +3,9 @@
 REPO_PATH=$PWD
 
 # Remove previous service build
-if test -d credit_score_service; then
+if test -d idriss_token_finder_service; then
   echo "Removing previous service build"
-  sudo rm -r credit_score_service
+  sudo rm -r idriss_token_finder_service
 fi
 
 # Push packages and fetch service
@@ -13,7 +13,7 @@ make clean
 
 autonomy push-all
 
-autonomy fetch --local --service victorpolisetty/credit_score_service && cd credit_score_service
+autonomy fetch --local --service victorpolisetty/idriss_token_finder_service && cd idriss_token_finder_service
 
 # Build the image
 autonomy init --reset --author victorpolisetty --remote --ipfs --ipfs-node "/dns/registry.autonolas.tech/tcp/443/https"

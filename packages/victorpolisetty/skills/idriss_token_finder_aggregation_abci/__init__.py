@@ -17,22 +17,9 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the transaction payloads of the CreditScoreAggregationAbci."""
+"""This module contains the implementation of the idriss_token_finder_aggregation_abci skill."""
 
-from dataclasses import dataclass
-
-from packages.valory.skills.abstract_round_abci.base import BaseTxPayload
+from aea.configurations.base import PublicId
 
 
-@dataclass(frozen=True)
-class HelloPayload(BaseTxPayload):
-    """Represent a transaction payload for the HelloRound."""
-
-    content: str
-
-
-@dataclass(frozen=True)
-class CollectTalentProtocolScorePayload(BaseTxPayload):
-    """Represent a transaction payload for the CollectTalentProtocolScoreRound."""
-
-    content: str
+PUBLIC_ID = PublicId.from_str("victorpolisetty/idriss_token_finder_aggregation_abci:0.1.0")

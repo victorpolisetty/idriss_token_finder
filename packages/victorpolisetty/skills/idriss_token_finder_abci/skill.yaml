@@ -1,29 +1,33 @@
-name: credit_score_aggregation_abci
+name: idriss_token_finder_abci
 author: victorpolisetty
 version: 0.1.0
 type: skill
-description: A credit score aggregation abci skill.
+description: The chained abci for the idriss_token_finder application.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:
-  __init__.py: bafybeihbipiqxx4c5msglzwgvzszwqgmn2gnxjp4zwmstuqb2smde5q6om
-  behaviours.py: bafybeidxdfvhxpdtpx35epxo4waaet3bowzg6paitiqvrz7g5uupsl5hjq
-  dialogues.py: bafybeiclt3h6e3lfhi2sdsf7gdhgx36q3racic3n2pnc7ywercs54wwiaq
-  fsm_specification.yaml: bafybeigkttol5gyapbztim4x4l2pe63omexowdcxflgmq6zro5lzltkhom
-  handlers.py: bafybeictmebvwd742kqwoyrfyrwh7jmxrfifxfc53i46wappykf5ql6v2i
-  models.py: bafybeicvjxlanmffcm2f4lacxyj44ei2n7fysfucemjuqnnsx4ihztdb7m
-  payloads.py: bafybeiht3xomkc5snue3goiyta3huinnqqskqc4qvtmgcju5qikngkista
-  rounds.py: bafybeiblzo5bcp22cbv5dje7po2cyofhfidd6y6bi2555cskhs2b5oozbq
+  __init__.py: bafybeidorrjhj3xskxgpbihloken4e2esmxdzrmb3mm4j5n5fobdxu3aia
+  behaviours.py: bafybeidynp4gaa67bhspgkqwrmeewcgke2bynnd65e3lwx5a6ksmx6bawq
+  composition.py: bafybeid7gojhsbhze2kxb3m3a7majyiq5c7zq6www2dbraokcjgdayjowu
+  dialogues.py: bafybeict3vkqfezgys6i6z54b26as62upcet2ju3un5y7cqlxfnr75lgjq
+  fsm_specification.yaml: bafybeiffmxutvlnq7yxyaculicgfcq4zdgo47doly7nk5cgqz5nc6tcmmi
+  handlers.py: bafybeigdwiegtfotlhcjnwud4kaac3zzxkhowppzzw2cwxasosge5vc3p4
+  models.py: bafybeiewsgvnsoiflvuutoezi67evvyu3s2qx3wfmoa44uibqjn45v74t4
 fingerprint_ignore_patterns: []
 connections: []
 contracts: []
 protocols: []
 skills:
 - valory/abstract_round_abci:0.1.0:bafybeih3enhagoql7kzpeyzzu2scpkif6y3ubakpralfnwxcvxexdyvy5i
+- valory/registration_abci:0.1.0:bafybeiek7zcsxbucjwzgqfftafhfrocvc7q4yxllh2q44jeemsjxg3rcfm
+- valory/reset_pause_abci:0.1.0:bafybeidw4mbx3os3hmv7ley7b3g3gja7ydpitr7mxbjpwzxin2mzyt5yam
+- valory/termination_abci:0.1.0:bafybeihq6qtbwt6i53ayqym63vhjexkcppy26gguzhhjqywfmiuqghvv44
+- victorpolisetty/idriss_token_finder_aggregation_abci:0.1.0:bafybeihnmnjnl7drucndtoa7g42ngxxwmpfjiexnfguu5vmqxxbkdt5olm
+- valory/transaction_settlement_abci:0.1.0:bafybeigtzlk4uakmd54rxnznorcrstsr52kta474lgrnvx5ovr546vj7sq
 behaviours:
   main:
     args: {}
-    class_name: CreditScoreAggregationRoundBehaviour
+    class_name: IdrissTokenFinderConsensusBehaviour
 handlers:
   abci:
     args: {}
@@ -57,22 +61,22 @@ models:
   contract_api_dialogues:
     args: {}
     class_name: ContractApiDialogues
-  http_dialogues:
-    args: {}
-    class_name: HttpDialogues
   ipfs_dialogues:
     args: {}
     class_name: IpfsDialogues
   ledger_api_dialogues:
     args: {}
     class_name: LedgerApiDialogues
+  http_dialogues:
+    args: {}
+    class_name: HttpDialogues
   params:
     args:
       cleanup_history_depth: 1
       cleanup_history_depth_current: null
       drand_public_key: 868f005eb8e6e4ca0a47c8a77ceaa5309a47978a7c71bc5cce96366b5d7a569937c529eeda66c7293784a9402801af31
-      finalize_timeout: 60.0
       genesis_config:
+        genesis_time: '2022-09-26T00:00:00.000000000Z'
         chain_id: chain-c4daS1
         consensus_params:
           block:
@@ -80,25 +84,26 @@ models:
             max_gas: '-1'
             time_iota_ms: '1000'
           evidence:
-            max_age_duration: '172800000000000'
             max_age_num_blocks: '100000'
+            max_age_duration: '172800000000000'
             max_bytes: '1048576'
           validator:
             pub_key_types:
             - ed25519
           version: {}
-        genesis_time: '2022-05-20T16:00:21.735122717Z'
         voting_power: '10'
-      history_check_timeout: 1205
-      ipfs_domain_name: null
-      keeper_allowed_retries: 3
       keeper_timeout: 30.0
       max_attempts: 10
       max_healthcheck: 120
+      multisend_address: '0x0000000000000000000000000000000000000000'
+      termination_sleep: 900
+      termination_from_block: 0
+      init_fallback_gas: 0
+      keeper_allowed_retries: 3
+      reset_pause_duration: 10
       on_chain_service_id: null
       request_retry_delay: 1.0
       request_timeout: 10.0
-      reset_pause_duration: 10
       reset_tendermint_after: 2
       retry_attempts: 400
       retry_timeout: 3
@@ -108,8 +113,8 @@ models:
       setup:
         all_participants:
         - '0x0000000000000000000000000000000000000000'
-        consensus_threshold: null
         safe_contract_address: '0x0000000000000000000000000000000000000000'
+        consensus_threshold: null
       share_tm_config_on_startup: false
       sleep_time: 1
       tendermint_check_sleep_delay: 3
@@ -117,7 +122,6 @@ models:
       tendermint_max_retries: 5
       tendermint_p2p_url: localhost:26656
       tendermint_url: http://localhost:26657
-      tx_timeout: 10.0
       use_termination: false
       validate_timeout: 1205
       task_deadline: 240.0
@@ -128,26 +132,41 @@ models:
       from_block_range: 5000
       timeout_limit: 3
       max_block_window: 500
+      finalize_timeout: 60.0
+      history_check_timeout: 1205
       use_slashing: false
       slash_cooldown_hours: 3
       slash_threshold_amount: 10000000000000000
       light_slash_unit_amount: 5000000000000000
       serious_slash_unit_amount: 8000000000000000
+      multisend_batch_size: 50
+      tx_timeout: 10.0
+      ipfs_address: https://gateway.autonolas.tech/ipfs/
       service_endpoint_base: https://demo.staging.autonolas.tech/
     class_name: Params
-  talent_protocol_score_response:
+  randomness_api:
     args:
-      api_id: talent_protocol_score_response
-      headers:
-        Content-Type: application/json
-        X-API-KEY: null
+      api_id: cloudflare
+      headers: {}
       method: GET
       parameters: {}
       response_key: null
       response_type: dict
       retries: 5
-      url: https://api.talentprotocol.com/api/v2/passports/1121510
-    class_name: TalentProtocolScoreResponseSpecs
+      url: https://drand.cloudflare.com/public/latest
+    class_name: RandomnessApi
+  farcaster_search_response:
+    args:
+      api_id: farcaster_search_response
+      headers:
+        Content-Type: application/json
+      method: GET
+      parameters: {}
+      response_key: null
+      response_type: dict
+      retries: 5
+      url: https://searchcaster.xyz/api/search?text=test&count=1
+    class_name: FarcasterSearchResponseSpecs
   requests:
     args: {}
     class_name: Requests
@@ -161,5 +180,4 @@ models:
     args: {}
     class_name: TendermintDialogues
 dependencies: {}
-is_abstract: true
-customs: []
+is_abstract: false

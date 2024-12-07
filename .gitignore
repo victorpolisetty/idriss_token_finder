@@ -12,9 +12,9 @@ leak_report
 /Pipfile.lock
 keys.json
 ethereum_private_key.txt
-credit_score_agent
-!packages/victorpolisetty/agents/credit_score_agent/
-credit_score_service
-!packages/victorpolisetty/services/credit_score_service/
+idriss_token_finder_agent
+!packages/victorpolisetty/agents/idriss_token_finder_agent/
+idriss_token_finder_service
+!packages/victorpolisetty/services/idriss_token_finder_service/
 __pycache__/
 .env

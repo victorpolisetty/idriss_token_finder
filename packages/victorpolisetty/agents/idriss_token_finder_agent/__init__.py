@@ -17,9 +17,8 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the implementation of the credit_score chained skill."""
+"""Package for victorpolisetty/idriss_token_finder_agent."""
+from pathlib import Path
 
-from aea.configurations.base import PublicId
 
-
-PUBLIC_ID = PublicId.from_str("victorpolisetty/credit_score_abci:0.1.0")
+PACKAGE_DIR = Path(__file__).parent

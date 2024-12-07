@@ -19,7 +19,7 @@
 
 """This module contains the handlers for the skill of AlprinaAbciApp."""
 
-from packages.victorpolisetty.skills.credit_score_aggregation_abci.handlers import HttpHandler as BaseHttpHandler
+from packages.victorpolisetty.skills.idriss_token_finder_aggregation_abci.handlers import HttpHandler as BaseHttpHandler
 from packages.valory.skills.abstract_round_abci.handlers import (
     ABCIRoundHandler as BaseABCIRoundHandler,
 )

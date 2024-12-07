@@ -17,11 +17,11 @@
 #
 # ------------------------------------------------------------------------------
 
-"""This module contains the shared state for the abci skill of CreditScoreAggregationAbciApp."""
+"""This module contains the shared state for the abci skill of IdrissTokenFinderAggregationAbciApp."""
 import os
 import json
 import base64
-from packages.victorpolisetty.skills.credit_score_aggregation_abci.rounds import CreditScoreAggregationAbciApp
+from packages.victorpolisetty.skills.idriss_token_finder_aggregation_abci.rounds import IdrissTokenFinderAggregationAbciApp
 from packages.valory.skills.abstract_round_abci.models import BaseParams
 from packages.valory.skills.abstract_round_abci.models import (
     BenchmarkTool as BaseBenchmarkTool,
@@ -42,7 +42,7 @@ load_dotenv()  # Load environment variables from .env file
 class SharedState(BaseSharedState):
     """Keep the current shared state of the skill."""
 
-    abci_app_cls = CreditScoreAggregationAbciApp
+    abci_app_cls = IdrissTokenFinderAggregationAbciApp
 
 
 Requests = BaseRequests
@@ -107,18 +107,15 @@ class Params(BaseParams):
         super().__init__(*args, **kwargs)
 
 
-class TalentProtocolScoreResponseSpecs(ApiSpecs):
-    """A model that wraps ApiSpecs for the Talent Protocol API response specifications."""
+class FarcasterSearchResponseSpecs(ApiSpecs):
+    """A model that wraps ApiSpecs for the Farcaster Search API response specifications."""
 
     def get_spec(self) -> Dict[str, Any]:
-        """Return the specifications for the Talent Protocol API request."""
-        # Access the API keys loaded in Params
-        api_key_id = self.context.params.api_keys["TALENT-PROTOCOL-API-KEY"]
+        """Return the specifications for the Farcaster Search API request."""
         return {
             "method": "GET",
-            "url": "https://api.talentprotocol.com/api/v2/passports/1121510",
+            "url": "https://searchcaster.xyz/api/search?text=test&count=1",
             "headers": {
-                "X-API-KEY": api_key_id,
                 "accept": "application/json"
             },
             "parameters": {}
