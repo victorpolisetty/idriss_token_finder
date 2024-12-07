@@ -1,0 +1,30 @@
+alphabet_in:
+  - DONE
+  - NO_MAJORITY
+  - RESET_AND_PAUSE_TIMEOUT
+  - ROUND_TIMEOUT
+default_start_state: RegistrationStartupRound
+final_states: []
+label: CreditScoreSkillAbciApp
+start_states:
+  - RegistrationRound
+  - RegistrationStartupRound
+states:
+  - HelloRound
+  - CollectTalentProtocolScoreRound
+  - RegistrationRound
+  - RegistrationStartupRound
+  - ResetAndPauseRound
+transition_func:
+  (HelloRound, DONE): CollectTalentProtocolScoreRound
+  (HelloRound, NO_MAJORITY): HelloRound
+  (HelloRound, ROUND_TIMEOUT): HelloRound
+  (CollectTalentProtocolScoreRound, DONE): ResetAndPauseRound
+  (CollectTalentProtocolScoreRound, NO_MAJORITY): CollectTalentProtocolScoreRound
+  (CollectTalentProtocolScoreRound, ROUND_TIMEOUT): CollectTalentProtocolScoreRound
+  (RegistrationRound, DONE): HelloRound
+  (RegistrationRound, NO_MAJORITY): RegistrationRound
+  (RegistrationStartupRound, DONE): HelloRound
+  (ResetAndPauseRound, DONE): HelloRound
+  (ResetAndPauseRound, NO_MAJORITY): ResetAndPauseRound
+  (ResetAndPauseRound, RESET_AND_PAUSE_TIMEOUT): ResetAndPauseRound

@@ -1,0 +1,21 @@
+alphabet_in:
+  - DONE
+  - NO_MAJORITY
+  - ROUND_TIMEOUT
+default_start_state: HelloRound
+final_states:
+  - FinishedHelloRound
+label: CreditScoreAggregationAbciApp
+start_states:
+  - HelloRound
+states:
+  - HelloRound
+  - CollectTalentProtocolScoreRound
+  - FinishedHelloRound
+transition_func:
+  (HelloRound, DONE): CollectTalentProtocolScoreRound
+  (HelloRound, NO_MAJORITY): HelloRound
+  (HelloRound, ROUND_TIMEOUT): HelloRound
+  (CollectTalentProtocolScoreRound, DONE): FinishedHelloRound
+  (CollectTalentProtocolScoreRound, NO_MAJORITY): CollectTalentProtocolScoreRound
+  (CollectTalentProtocolScoreRound, ROUND_TIMEOUT): CollectTalentProtocolScoreRound
