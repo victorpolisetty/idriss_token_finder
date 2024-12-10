@@ -52,3 +52,7 @@ make tm (seperate terminals)
 ```bash
 ./run_service.sh
 ```
+
+## Current Output
+
+![Screenshot 2024-12-10 at 9 19 21 AM](https://github.com/user-attachments/assets/0956d865-2656-48de-897c-036bca14ff11)
