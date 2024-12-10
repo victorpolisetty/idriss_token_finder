@@ -1,0 +1,47 @@
+openapi: 3.0.0
+info:
+  title: IDRISS Token Finder API
+  description: An API that takes a natural language input and returns a string response after searching through Farcaster Search API.
+  version: 1.0.0
+servers:
+  - url: http://0.0.0.0:5555
+paths:
+  /api/token-finder:
+    post:
+      summary: Process user-provided text and return answer after searching Farcaster
+      requestBody:
+        description: The input text to be processed
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                input_text:
+                  type: string
+                  example: "Hello, world!"
+                  description: The string input from the user
+              required:
+                - input_text
+      responses:
+        "200":
+          description: Successfully processed the text
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response_text:
+                    type: string
+                    example: "Processed: Hello, world!"
+                    description: The processed string response
+        "400":
+          description: Bad request, invalid input provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input provided"
