@@ -2,7 +2,7 @@ name: frontend_idriss_token_finder
 author: victorpolisetty
 version: 0.1.0
 type: custom
-description: Custom UI representing a user interface for the trader skill.
+description: A custom frontend interface for analyzing Farcaster data and identifying trading opportunities, integrating with the backend API to generate transaction payloads and manage notifications.
 license: Apache-2.0
 aea_version: '>=1.0.0, <2.0.0'
 fingerprint:

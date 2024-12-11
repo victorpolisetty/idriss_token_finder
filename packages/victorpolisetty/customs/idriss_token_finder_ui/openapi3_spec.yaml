@@ -1,47 +1,130 @@
 openapi: 3.0.0
 info:
-  title: IDRISS Token Finder API
-  description: An API that takes a natural language input and returns a string response after searching through Farcaster Search API.
+  title: Farcaster Agent API
+  description: API for an agent that analyzes Farcaster data and generates transaction payloads for relevant buy opportunities.
   version: 1.0.0
 servers:
-  - url: http://0.0.0.0:5555
+  - url: https://api.farcaster-agent.example.com/v1
 paths:
-  /api/token-finder:
+  /api/analyze:
     post:
-      summary: Process user-provided text and return answer after searching Farcaster
+      summary: Analyze Farcaster data for opportunities
+      description: Analyzes Farcaster posts based on the specified parameters.
       requestBody:
-        description: The input text to be processed
         required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                input_text:
+                query:
                   type: string
-                  example: "Hello, world!"
-                  description: The string input from the user
+                  description: Natural language query specifying the parameters (e.g., "social coin, <7days old, <10k market cap").
+                max_results:
+                  type: integer
+                  description: Maximum number of results to analyze.
+                  default: 50
               required:
-                - input_text
+                - query
       responses:
-        "200":
-          description: Successfully processed the text
+        '200':
+          description: Successful analysis
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  response_text:
-                    type: string
-                    example: "Processed: Hello, world!"
-                    description: The processed string response
-        "400":
-          description: Bad request, invalid input provided
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        post_id:
+                          type: string
+                          description: Unique ID of the analyzed post.
+                        opportunity:
+                          type: boolean
+                          description: Indicates if the post represents a buy opportunity.
+                        details:
+                          type: string
+                          description: Explanation of why this post is relevant.
+        '400':
+          description: Bad request
+  /api/transaction-payload:
+    post:
+      summary: Generate transaction payload
+      description: Creates a transaction payload for identified buy opportunities.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                opportunities:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      post_id:
+                        type: string
+                        description: Unique ID of the analyzed post.
+                      asset:
+                        type: string
+                        description: Asset to be purchased.
+                      quantity:
+                        type: number
+                        description: Quantity to be purchased.
+                      price:
+                        type: number
+                        description: Price per unit of the asset.
+              required:
+                - opportunities
+      responses:
+        '200':
+          description: Transaction payload created
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  error:
-                    type: string
-                    example: "Invalid input provided"
+                  transaction_payload:
+                    type: object
+                    description: The generated transaction payload.
+        '400':
+          description: Bad request
+  /api/notifications:
+    post:
+      summary: Send buy opportunity notifications
+      description: Sends notifications to the copy trading UI for buy opportunities.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                opportunities:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      post_id:
+                        type: string
+                        description: Unique ID of the analyzed post.
+                      asset:
+                        type: string
+                        description: Asset to be purchased.
+                      quantity:
+                        type: number
+                        description: Quantity to be purchased.
+                      price:
+                        type: number
+                        description: Price per unit of the asset.
+              required:
+                - opportunities
+      responses:
+        '200':
+          description: Notifications sent successfully
+        '400':
+          description: Bad request

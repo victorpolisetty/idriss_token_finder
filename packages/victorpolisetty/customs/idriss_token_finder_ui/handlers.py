@@ -18,10 +18,12 @@
 
 """This package contains a scaffold of a handler."""
 
+import json
 import re
 from urllib.parse import unquote, urlparse
 
 from aea.skills.base import Handler
+import requests
 from packages.eightballer.protocols.http.message import HttpMessage as ApiHttpMessage
 
 
@@ -66,11 +68,110 @@ class ApiHttpHandler(Handler):
 
 
 
-    def handle_post_api_token_finder(self, message: ApiHttpMessage, body):
-        """Handle POST request for /api/token-finder."""
+    def handle_post_api_analyze(self, message: ApiHttpMessage, body):
+        """Handle POST request for /api/analyze."""
+        self.context.logger.debug(f"Request body: {body}")
+        
+        try:
+            # Parse the incoming request body
+            request_data = json.loads(body.decode("utf-8"))
+            query = request_data.get("query")
+            max_results = request_data.get("max_results", 25)
+            page = request_data.get("page", 0)
+            
+            if not query:
+                raise ValueError("Query parameter is required.")
+            
+            # Define the Searchcaster API endpoint
+            searchcaster_endpoint = "https://searchcaster.xyz/api/search"
+            
+            # Construct the request parameters
+            params = {
+                "text": query,
+                "count": max_results,
+                "page": page,
+            }
+            
+            # Make the HTTP request to Searchcaster
+            response = requests.get(searchcaster_endpoint, params=params)
+            response.raise_for_status()
+            
+            # Parse the response from Searchcaster
+            results = response.json()
+            
+            # Prepare the response body
+            response_body = {
+                "results": [
+                    {
+                        "post_id": cast.get("merkleRoot"),
+                        "text": cast["body"]["data"]["text"],
+                        "username": cast["body"]["username"],
+                        "displayName": cast["meta"]["displayName"],
+                        "engagement": {
+                            "reactions": cast["meta"]["reactions"]["count"],
+                            "recasts": cast["meta"]["recasts"]["count"],
+                            "watches": cast["meta"]["watches"]["count"]
+                        },
+                        "tags": cast["meta"].get("tags", []),
+                        "mentions": cast["meta"].get("mentions", [])
+                    }
+                    for cast in results.get("casts", [])
+                ]
+            }
+            
+            # Return the formatted response
+            return ApiHttpMessage(
+                performative=ApiHttpMessage.Performative.RESPONSE,
+                status_code=200,
+                status_text="OK",
+                headers="Content-Type: application/json",
+                version=message.version,
+                body=json.dumps(response_body).encode("utf-8")
+            )
+        except ValueError as e:
+            self.context.logger.error(f"Error processing request: {str(e)}")
+            return ApiHttpMessage(
+                performative=ApiHttpMessage.Performative.RESPONSE,
+                status_code=400,
+                status_text="Bad Request",
+                headers="Content-Type: application/json",
+                version=message.version,
+                body=json.dumps({"error": str(e)}).encode("utf-8")
+            )
+        except Exception as e:
+            self.context.logger.error(f"Unexpected error: {str(e)}")
+            return ApiHttpMessage(
+                performative=ApiHttpMessage.Performative.RESPONSE,
+                status_code=500,
+                status_text="Internal Server Error",
+                headers="Content-Type: application/json",
+                version=message.version,
+                body=json.dumps({"error": "An internal error occurred"}).encode("utf-8")
+            )
+
+
+    def handle_post_api_transaction_payload(self, message: ApiHttpMessage, body):
+        """Handle POST request for /api/transaction-payload."""
         self.context.logger.debug(f"Request body: {body}")
 
-        # TODO: Implement POST logic for /api/token-finder
+        # TODO: Implement POST logic for /api/transaction-payload
+        # TODO: Use this template to return a response with a status code and status text
+        # return ApiHttpMessage(
+        #     performative=ApiHttpMessage.Performative.RESPONSE,
+        #     status_code=status_code,
+        #     status_text=status_text,
+        #     headers="",
+        #     version=message.version,
+        #     body=b""
+        # )
+        raise NotImplementedError
+
+
+    def handle_post_api_notifications(self, message: ApiHttpMessage, body):
+        """Handle POST request for /api/notifications."""
+        self.context.logger.debug(f"Request body: {body}")
+
+        # TODO: Implement POST logic for /api/notifications
         # TODO: Use this template to return a response with a status code and status text
         # return ApiHttpMessage(
         #     performative=ApiHttpMessage.Performative.RESPONSE,
